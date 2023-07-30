@@ -156,14 +156,14 @@ function checkBingo() {
 
 // 게임 종료 메시지 표시 함수
 function displayGameOverMessage(isBingo) {
-  showModal(isBingo ? "축하합니다! 빙고를 완성하셨습니다." : "실패했습니다! 조금더 노력합시다.");
+  showModal(isBingo ? "<span>😍</span> Bingo" : "<span>💥</span> try again.");  
 }
 
 // 메시지 모달 창 표시 함수
 function showModal(message) {
   const messageModal = document.getElementById("messageModal");
   const messageText = document.getElementById("messageText");
-  messageText.textContent = message;
+  messageText.innerHTML = message;
   messageModal.style.display = "flex";
 }
 

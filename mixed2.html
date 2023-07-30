@@ -4,38 +4,37 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>구구단 빙고 게임 </h1>
+  <h1>Multiplication Table Bingo Game</h1>
   <div class="button-container">
     <button onclick="startGame(3)">3 x 3</button>
     <button onclick="startGame(4)">4 x 4</button>
     <button onclick="startGame(5)">5 x 5</button>
-    <!-- Add other times table buttons as needed -->
   </div>
+  <div class="bingo-star" id="bingoStar">💙</div>
   <div class="bingo-board" id="bingoBoard"></div>
-
   <div class="bingo-level">
 	<a href="index.html">시작단계</a> /
 	<a href="mixed.html">조금 어려운 단계</a> /
 	<a href="mixed2.html">어려운 단계</a>
   </div>
-
-<!-- 타이머 게이지 -->
+  
+<!-- timer gauge -->
   <div class="timer-container">
     <div class="timer" id="timerDisplay">30초</div>
     <div class="timer-gauge" id="timerGauge"></div>
 	<div class="timer-bomb">💣</div>
   </div>
 
-  <!-- 결과 입력 모달 창 -->
+  <!-- user input modal window -->
   <div class="modal" id="inputModal">
     <div class="modal-content">
-      <label for="result">결과 입력:</label>
+      <label for="result">Result:</label>
       <input type="number" id="result" onkeydown="handleInputKeyDown(event)">
-      <button onclick="submitResult()">확인</button>
+      <button onclick="submitResult()">Submit</button>
     </div>
   </div>
 
-  <!-- 메시지 모달 창 -->
+  <!-- message modal window  -->
   <div class="modal" id="messageModal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeMessageModal()">&times;</span>
@@ -43,6 +42,6 @@
     </div>
   </div>
 
-  <script src="mixed_script.js"></script>
+  <script src="mixed2_script.js"></script>
 </body>
 </html>

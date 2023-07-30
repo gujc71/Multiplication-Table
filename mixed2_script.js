@@ -1,12 +1,11 @@
-// 변수 및 초기화
 let timerInterval;
 let timeRemaining;
 let isGameOver = false;
-let selectedNumbers = [];
 let currentCell;
 let cellCount = 3;
+let bingoCnt = 0;
+let selectedCount =0;
 
-// 구구단 빙고 게임 시작 함수
 function startGame(level) {
   cellCount = level;	
   resetGame();
@@ -16,6 +15,12 @@ function startGame(level) {
 
 // 빙고판 생성 함수
 function generateBingoBoard() {
+  selectedCount = 0;   // click number
+  bingoCnt = 0;
+  
+  const bingoStar = document.getElementById("bingoStar");
+  bingoStar.innerHTML = "";
+
   const bingoBoard = document.getElementById("bingoBoard");
   bingoBoard.innerHTML = "";
   bingoBoard.style.gridTemplateColumns = "repeat(" + cellCount + ", 1fr)";
@@ -45,10 +50,15 @@ function getShuffledBingoProblems() {
   const bingoProblems = [];
 
   // 해당 구구단의 모든 문제를 배열에 추가
-  for (let i = 1; i <= cellCount * cellCount; i++) {
+  while (bingoProblems.length < cellCount * cellCount) { 	  
     let gu1 = Math.ceil(Math.random()*9);  
-    let gu2 = Math.ceil(Math.random()*9);  
-    bingoProblems.push(`${gu1} x ${gu2}`);
+    let gu2 = Math.ceil(Math.random()*9);
+	if (gu1===1 ) gu1 = 2;
+	if (gu2===1 ) gu2 = 3;
+
+    let problems = `${gu1} x ${gu2}`;
+	if (bingoProblems.indexOf(problems)===-1)
+		bingoProblems.push(problems);
   }
 
   return bingoProblems;
@@ -56,8 +66,7 @@ function getShuffledBingoProblems() {
 
 // 숫자 체크 함수
 function checkNumber(cell) {
-  if (!isGameOver && !selectedNumbers.includes(cell.textContent)) {
-  if (cell.classList.length>1) return;  
+  if (!isGameOver && cell.classList.length===1) {
     currentCell = cell;
     openInputModal();
   }
@@ -90,17 +99,23 @@ function submitResult() {
   const inputResult = document.getElementById("result").value;
   if (inputResult.trim() === "") return;
   
-    const result = eval(currentCell.textContent.replace("x", "*"));
-    if (Number(inputResult) === result) {
-      selectedNumbers.push(currentCell.textContent);
-      currentCell.classList.add("marked");
-      checkBingo();
-    } else {
-      currentCell.classList.add("wrong");
-    }
+  selectedCount++;	
+  const result = eval(currentCell.textContent.replace("x", "*"));
+  if (Number(inputResult) === result) {
+    currentCell.classList.add("marked");
+    checkBingo();
+  } else {
+    currentCell.classList.add("wrong");
+  }
 
-    closeInputModal();
+  closeInputModal();
   
+  if (!isGameOver && selectedCount===cellCount*cellCount) {
+    stopTimer();
+    isGameOver = true;
+    displayGameOverMessage(false);	  
+  }
+
 }
 
 // 빙고 여부 확인 함수
@@ -108,22 +123,34 @@ function checkBingo() {
   const bingoBoard = document.getElementById("bingoBoard");
   const cells = bingoBoard.getElementsByClassName("cell");
 
+  let cnt1 =0;
+  let cnt2 =0;
   for (let i = 0; i < cellCount; i++) {
-    if ( horizonBingo(cells, i*cellCount) || verticalBingo(cells, i)) {
-      isGameOver = true;
-      stopTimer();
-      displayGameOverMessage(true);  
-      return;
-    }
+	if (horizonBingo(cells, i*cellCount)) cnt1++;
+    if (cnt1 >=cellCount)  {
+	  addBinfoStart();
+	  isGameOver = true;
+	  stopTimer();
+	  showModal("<span>💝</span> Perfect!");
+	  return;
+	}	
+	if (verticalBingo(cells, i)) cnt2++;
   }
+  
+  cnt1 += cnt2; 
+  if ( diagonal_1(cells) )  cnt1++;
+  if ( diagonal_2(cells) )  cnt1++;
 
-  if ( diagonal_1(cells) || diagonal_2(cells)) {
-    isGameOver = true;
-    stopTimer();
-    displayGameOverMessage(true);  
+  if (cnt1 > bingoCnt && cnt1 <cellCount)  {
+	addBinfoStart();
   }
+  bingoCnt = cnt1; 	
 }
 
+function addBinfoStart() {
+	const bingoStar = document.getElementById("bingoStar");
+	bingoStar.innerHTML += "💛";	
+}
 
 // 가로줄 빙고 확인
 function horizonBingo(cells, index) {
@@ -160,7 +187,7 @@ function diagonal_2(cells) {
 
 // 게임 종료 메시지 표시 함수
 function displayGameOverMessage(isBingo) {
-  showModal(isBingo ? "<span>😍</span> Bingo" : "<span>💥</span> try again.");
+  showModal(bingoCnt>0 ? "<span>😍</span> Bingo" : "<span>💥</span> try again.");
 }
 
 // 메시지 모달 창 표시 함수
@@ -179,7 +206,7 @@ function closeMessageModal() {
 
 // 타이머 시작 함수
 function startTimer() {
-  timeRemaining = 10 * cellCount;
+  timeRemaining = 15 * cellCount;
   updateTimerDisplay();
   timerInterval = setInterval(() => {
     timeRemaining--;
@@ -197,7 +224,7 @@ function updateTimerDisplay() {
   const timerDisplay = document.getElementById("timerDisplay");
   timerDisplay.textContent = `${timeRemaining}초`;
   const timerGauge = document.getElementById("timerGauge");
-  const gaugeWidth = (timeRemaining / (10*cellCount)) * 90;
+  const gaugeWidth = (timeRemaining / (15*cellCount)) * 90;
   timerGauge.style.width = `${gaugeWidth}%`;  
 }
 
@@ -209,9 +236,8 @@ function stopTimer() {
 // 게임 초기화 함수
 function resetGame() {
   stopTimer();
-  timeRemaining = 10 * cellCount;
+  timeRemaining = 15 * cellCount;
   isGameOver = false;
-  selectedNumbers = [];
   currentCell = null;
 
   const bingoBoard = document.getElementById("bingoBoard");
