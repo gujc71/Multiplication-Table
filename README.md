@@ -1,15 +1,5 @@
 # 구구단 빙고 게임
 
-아이들이 쉽게 구구단을 익힐 수 있도록 빙고 게임으로 개발한 것으로 휴대폰에서 실행하도록 구현 하였습니다.
+다음 주소로 이전하였습니다.
+[https://github.com/gujc71/arithmeticBingo9/](https://github.com/gujc71/arithmeticBingo9/)
 
-거의 대부분을 ChatGPT로 작성하고, 마지막에 다듬는 부분만 사람이 작성하여 구현하였습니다.
-
-[기본 구구단 게임은 여기서 확인 할 수 있습니다.](https://gujc71.github.io/Multiplication-Table/)
-
-ChatGPT로 작성한 기본 구구단의 코드를 수정하여, 난이도를 높인 레벨을 추가하였습니다.
-
-수정을 위해 ChatGPT가 작성한 코드를 확인한 결과, 코딩 수준은 그렇게 높지 않은 것 같습니다.
-
-제대로 명령을 못한 것 일 수 있습니다.
-
-[혼합 구구단 게임은 여기서 확인 할 수 있습니다.](https://gujc71.github.io/Multiplication-Table/mixed.html)
